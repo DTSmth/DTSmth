@@ -2,13 +2,7 @@ package com.techelevator.model;
 
 import javax.validation.constraints.NotEmpty;
 
-/**
- * RegisterUserDto is a class used to hold the registration information for a new user
- * that's sent from the client to the server for the register endpoint.
- *
- * The acronym DTO is being used for "data transfer object". It means that this type of
- * class is specifically created to transfer data between the client and the server.
- */
+
 public class RegisterUserDto {
 
     @NotEmpty

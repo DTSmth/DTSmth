@@ -3,14 +3,14 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.ShiftDao;
 import com.techelevator.model.Shift;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/shifts")
+@PreAuthorize("isAuthenticated()")
 public class ShiftController {
     private final ShiftDao shiftDao;
 
@@ -20,8 +20,31 @@ public class ShiftController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Shift> getAllShifts() {
+    public List<Shift> getAllShifts(@RequestParam(defaultValue = "") String serviceName) {
+
+        if (!serviceName.equals("")) {
+            return shiftDao.getShiftByServiceName(serviceName);
+        }
+
         return shiftDao.getAvailableShifts(true);
+    }
+    
+
+    @RequestMapping(path = "/byTotalHours", method = RequestMethod.GET)
+    public List<Shift> getShiftsByTotalHours(
+            @RequestParam int minHours,
+            @RequestParam int maxHours,
+            @RequestParam boolean isAvailable
+    ) {
+        return shiftDao.getShiftByTotalHours(minHours, maxHours, isAvailable);
+    }
+
+    @RequestMapping(path = "/byZipcode", method = RequestMethod.GET)
+    public List<Shift> getShiftsByZipcode(
+            @RequestParam String zipcode,
+            @RequestParam boolean isAvailable
+    ) {
+        return shiftDao.getShiftByZipcode(zipcode, isAvailable);
     }
 
 }

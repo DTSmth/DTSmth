@@ -120,17 +120,7 @@ public class User {
       this.shortBio = shortBio;
    }
 
-   /*
-    * Note that the `equals` method must be overridden in a class to support checking object equality
-    * based on the values of its properties - for example here, two User instances are
-    * considered equal if they have the same `name` and `authorities` values. If this method is not
-    * overridden in a class, the .equals method only returns true when comparing the same exact instance
-    * of a class to itself.
-    *
-    * Note that it is a best practice to ensure that `equals` and `hashcode` methods are consistent by
-    * overriding both of them together and using the same properties in both methods to check equality
-    * and generate the hash.
-    */
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;

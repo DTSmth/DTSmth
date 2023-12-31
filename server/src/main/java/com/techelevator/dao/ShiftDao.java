@@ -16,7 +16,7 @@ public interface ShiftDao {
     List<Shift> getShiftByClientId(int clientId, boolean isAvailable);
 
     // Get shifts from datastore by service ID with client names
-    List<Shift> getShiftByServiceId(int serviceId, boolean isAvailable);
+    List<Shift> getShiftByServiceName(String serviceName);
 
     // Get shifts from datastore by total hours with client names
     List<Shift> getShiftByTotalHours(int minHours, int maxHours, boolean isAvailable);

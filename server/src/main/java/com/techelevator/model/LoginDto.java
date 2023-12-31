@@ -1,12 +1,6 @@
 package com.techelevator.model;
 
-/**
- * LoginDto is a class used to hold the user login information that's sent from the
- * client to the server for the login endpoint.
- *
- * The acronym DTO is being used for "data transfer object". It means that this type of
- * class is specifically created to transfer data between the client and the server.
- */
+
 public class LoginDto {
 
    private String username;

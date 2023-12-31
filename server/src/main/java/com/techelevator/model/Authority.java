@@ -29,15 +29,7 @@ public class Authority {
       this.name = name;
    }
 
-   /*
-    * Note that the `equals` method must be overridden in class to support checking object equality
-    * based on the values of its properties - for example here, two Authority instances are
-    * considered equal if they have the same `name` value. If this method is not overridden in a class,
-    * the .equals method only returns true when comparing the same exact instance of a class to itself.
-    *
-    * Note that it is a best practice to ensure that `equals` and `hashcode` are consistent by overriding
-    * both methods and having them use the same properties to check equality and generate the hash.
-    */
+
    @Override
    public boolean equals(Object o) {
       if (this == o) {

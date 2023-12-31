@@ -12,9 +12,10 @@ public class Shift {
     private boolean isAvailable;
     private String firstName;
     private String lastName;
+    private String serviceName;
 
 
-    public Shift(int shiftId, int clientId, int serviceId, int totalHours, String zipcode, boolean isAvailable, String firstName, String lastName) {
+    public Shift(int shiftId, int clientId, int serviceId, int totalHours, String zipcode, boolean isAvailable, String firstName, String lastName, String serviceName) {
         this.shiftId = shiftId;
         this.clientId = clientId;
         this.serviceId = serviceId;
@@ -23,6 +24,7 @@ public class Shift {
         this.isAvailable = isAvailable;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.serviceName = serviceName;
     }
 
     public int getShiftId() {
@@ -89,6 +91,14 @@ public class Shift {
         this.lastName = lastName;
     }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     @Override
     public String toString() {
         return "Shift{" +
@@ -100,6 +110,7 @@ public class Shift {
                 ", isAvailable=" + isAvailable +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", serviceName='" + serviceName + '\'' +
                 '}';
     }
 
@@ -108,11 +119,11 @@ public class Shift {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Shift shift = (Shift) o;
-        return shiftId == shift.shiftId && clientId == shift.clientId && serviceId == shift.serviceId && totalHours == shift.totalHours && Objects.equals(zipcode, shift.zipcode) && Objects.equals(firstName, shift.firstName) && Objects.equals(lastName, shift.lastName);
+        return shiftId == shift.shiftId && clientId == shift.clientId && serviceId == shift.serviceId && totalHours == shift.totalHours && isAvailable == shift.isAvailable && Objects.equals(zipcode, shift.zipcode) && Objects.equals(firstName, shift.firstName) && Objects.equals(lastName, shift.lastName) && Objects.equals(serviceName, shift.serviceName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shiftId, clientId, serviceId, totalHours, zipcode, firstName, lastName);
+        return Objects.hash(shiftId, clientId, serviceId, totalHours, zipcode, isAvailable, firstName, lastName, serviceName);
     }
 }
