@@ -28,7 +28,7 @@ public class ShiftController {
 
         return shiftDao.getAvailableShifts(true);
     }
-    
+
 
     @RequestMapping(path = "/byTotalHours", method = RequestMethod.GET)
     public List<Shift> getShiftsByTotalHours(
