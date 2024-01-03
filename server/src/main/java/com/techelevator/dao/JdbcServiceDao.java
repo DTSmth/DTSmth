@@ -4,11 +4,14 @@ import com.techelevator.model.Service;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+@Component
 
 public class JdbcServiceDao  implements  ServiceDao {
 
@@ -41,7 +44,7 @@ public class JdbcServiceDao  implements  ServiceDao {
 
     @Override
     public Service getServiceByName(String name) {
-        String sql = "SELECT * FROM service WHERE service_name ILIKE ?";
+        String sql = "SELECT * FROM service WHERE service_name = ?";
         List<Service> service = jdbcTemplate.query(sql, MAPPER, name);
         return service.isEmpty() ? null : service.get(0);
     }

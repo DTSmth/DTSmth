@@ -6,6 +6,8 @@ public class Client {
 
     private int clientId;
     private String name;
+    private String lastName;
+
     private boolean hasPersonalCare;
     private boolean hasLifting;
     private String address1;
@@ -13,9 +15,10 @@ public class Client {
     private String zipcode;
     private String phoneNumber;
 
-    public Client(int clientId, String name, boolean hasPersonalCare, boolean hasLifting, String address1, String address2, String zipcode, String phoneNumber) {
+    public Client(int clientId, String name, String lastName, boolean hasPersonalCare, boolean hasLifting, String address1, String address2, String zipcode, String phoneNumber) {
         this.clientId = clientId;
         this.name = name;
+        this.lastName = lastName;
         this.hasPersonalCare = hasPersonalCare;
         this.hasLifting = hasLifting;
         this.address1 = address1;

@@ -24,5 +24,10 @@ public interface ShiftDao {
     // Get shifts from teh datastore by zipcode with client names
     List<Shift> getShiftByZipcode(String zipcode, boolean isAvailable);
 
+    // Remove a shift from datastore by its ID
+    public void removeShift (int shiftId);
+
+    Shift createShift(Shift shift);
+
 
 }

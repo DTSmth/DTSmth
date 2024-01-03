@@ -1,5 +1,7 @@
 package com.techelevator.dao;
 
+import com.techelevator.model.Client;
+import com.techelevator.model.Service;
 import com.techelevator.model.Shift;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,9 +16,14 @@ public class JdbcShiftDao implements  ShiftDao {
 
 
     private final JdbcTemplate jdbcTemplate;
+    private final ClientDao clientDao;
+    private final ServiceDao serviceDao;
 
-    public JdbcShiftDao(DataSource dataSource) {
+
+    public JdbcShiftDao(DataSource dataSource, ClientDao clientDao, ServiceDao serviceDao) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.clientDao = clientDao;
+        this.serviceDao = serviceDao;
     }
 
     public static final RowMapper<Shift> MAPPER = new RowMapper<Shift>() {
@@ -121,5 +128,21 @@ public class JdbcShiftDao implements  ShiftDao {
                 "JOIN service se ON s.service_id = se.service_id " +
                 "WHERE s.zipcode = ? AND s.available = ?";
         return jdbcTemplate.query(sql, MAPPER, zipcode, isAvailable);
+    }
+
+    @Override
+    public void removeShift(int shiftId) {
+        String sql = "DELETE FROM shift WHERE shift_id = ?";
+        jdbcTemplate.update(sql, shiftId);
+    }
+
+    @Override
+    public Shift createShift(Shift shift) {
+        List<Client> clients = clientDao.getClientByFirstNameLastName(shift.getFirstName(), shift.getLastName());
+        Client client = clients.get(0);
+        Service service = serviceDao.getServiceByName(shift.getServiceName());
+        String sql = "INSERT into SHIFT (client_id, service_id, total_hours, zipcode, available) VALUES (?,?,?,?,?) RETURNING shift_id";
+        Integer shiftId = jdbcTemplate.queryForObject(sql, Integer.class, client.getClientId(), service.getServiceId(), shift.getTotalHours(), shift.getZipcode(), shift.isAvailable() );
+        return getShiftById(shiftId);
     }
 }

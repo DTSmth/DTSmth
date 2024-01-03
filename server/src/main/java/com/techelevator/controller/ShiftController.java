@@ -47,4 +47,14 @@ public class ShiftController {
         return shiftDao.getShiftByZipcode(zipcode, isAvailable);
     }
 
+    @DeleteMapping("/{shiftId}")
+    public void removeShift(@PathVariable int shiftId) {
+        shiftDao.removeShift(shiftId);
+    }
+
+    @PostMapping()
+    public Shift createShift(@RequestBody Shift shift) {
+        return shiftDao.createShift(shift);
+    }
+
 }
