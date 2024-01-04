@@ -35,7 +35,8 @@ CREATE TABLE "shift" (
     "available" boolean   NOT NULL,
     CONSTRAINT "pk_shift" PRIMARY KEY (
         "shift_id"
-     )
+     ),
+    CONSTRAINT UQ_shift UNIQUE (client_id, service_id, total_hours, zipcode)
 );
 
 CREATE TABLE "service" (

@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import com.techelevator.exception.DaoException;
 import com.techelevator.model.Client;
 import com.techelevator.model.Service;
 import com.techelevator.model.Shift;
@@ -11,20 +12,10 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 @Component
-public class JdbcShiftDao implements  ShiftDao {
+public class JdbcShiftDao implements ShiftDao {
 
-
-    private final JdbcTemplate jdbcTemplate;
-    private final ClientDao clientDao;
-    private final ServiceDao serviceDao;
-
-
-    public JdbcShiftDao(DataSource dataSource, ClientDao clientDao, ServiceDao serviceDao) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.clientDao = clientDao;
-        this.serviceDao = serviceDao;
-    }
 
     public static final RowMapper<Shift> MAPPER = new RowMapper<Shift>() {
         @Override
@@ -38,9 +29,19 @@ public class JdbcShiftDao implements  ShiftDao {
             String clientFirstName = resultSet.getString("first_name");
             String clientLastName = resultSet.getString("last_name");
             String serviceName = resultSet.getString("service_name");
-            return new Shift(shiftId, clientId, serviceId, totalHours, zipcode, isAvailable, clientFirstName, clientLastName, serviceName) ;
+            return new Shift(shiftId, clientId, serviceId, totalHours, zipcode, isAvailable, clientFirstName, clientLastName, serviceName);
         }
     };
+    private final JdbcTemplate jdbcTemplate;
+    private final ClientDao clientDao;
+    private final ServiceDao serviceDao;
+
+    public JdbcShiftDao(DataSource dataSource, ClientDao clientDao, ServiceDao serviceDao) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.clientDao = clientDao;
+        this.serviceDao = serviceDao;
+    }
+
     @Override
     public Shift getShiftById(int shiftId) {
         String sql = "SELECT " +
@@ -138,11 +139,25 @@ public class JdbcShiftDao implements  ShiftDao {
 
     @Override
     public Shift createShift(Shift shift) {
-        List<Client> clients = clientDao.getClientByFirstNameLastName(shift.getFirstName(), shift.getLastName());
-        Client client = clients.get(0);
-        Service service = serviceDao.getServiceByName(shift.getServiceName());
+        int clientId = shift.getClientId();
+        if (clientId <= 0) {
+            List<Client> clients = clientDao.getClientByFirstNameLastName(shift.getFirstName(), shift.getLastName());
+            Client client = clients.isEmpty() ? null : clients.get(0);
+            if (client == null ) {
+                throw new DaoException(String.format("Client %s %s does not exist", shift.getFirstName(), shift.getLastName()));
+            }
+            clientId = client.getClientId();
+        }
+        int serviceId = shift.getServiceId();
+        if (serviceId <= 0 ) {
+            Service service = serviceDao.getServiceByName(shift.getServiceName());
+            if (service == null) {
+                throw new DaoException(String.format("Service %s does not exist", shift.getServiceName()));
+            }
+            serviceId = service.getServiceId();
+        }
         String sql = "INSERT into SHIFT (client_id, service_id, total_hours, zipcode, available) VALUES (?,?,?,?,?) RETURNING shift_id";
-        Integer shiftId = jdbcTemplate.queryForObject(sql, Integer.class, client.getClientId(), service.getServiceId(), shift.getTotalHours(), shift.getZipcode(), shift.isAvailable() );
+        Integer shiftId = jdbcTemplate.queryForObject(sql, Integer.class, clientId, serviceId, shift.getTotalHours(), shift.getZipcode(), shift.isAvailable());
         return getShiftById(shiftId);
     }
 }

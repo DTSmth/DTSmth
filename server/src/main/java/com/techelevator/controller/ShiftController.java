@@ -2,9 +2,12 @@ package com.techelevator.controller;
 
 
 import com.techelevator.dao.ShiftDao;
+import com.techelevator.exception.DaoException;
 import com.techelevator.model.Shift;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -54,7 +57,11 @@ public class ShiftController {
 
     @PostMapping()
     public Shift createShift(@RequestBody Shift shift) {
-        return shiftDao.createShift(shift);
+        try {
+            return shiftDao.createShift(shift);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
 }
