@@ -21,33 +21,22 @@ public class ShiftController {
         this.shiftDao = shiftDao;
     }
 
-
     @RequestMapping(method = RequestMethod.GET)
-    public List<Shift> getAllShifts(@RequestParam(defaultValue = "") String serviceName) {
-
-        if (!serviceName.equals("")) {
+    public List<Shift> getAllShifts(
+            @RequestParam(required = false) String serviceName,
+            @RequestParam(required = false) Integer minHours,
+            @RequestParam(required = false) Integer maxHours,
+            @RequestParam(required = false) String zipcode
+    ) {
+        if (!serviceName.isEmpty()) {
             return shiftDao.getShiftByServiceName(serviceName);
+        } else if (minHours != null && maxHours != null) {
+            return shiftDao.getShiftByTotalHours(minHours, maxHours);
+        } else if (zipcode != null) {
+            return shiftDao.getShiftByZipcode(zipcode);
+        } else {
+            return shiftDao.getAvailableShifts();
         }
-
-        return shiftDao.getAvailableShifts(true);
-    }
-
-
-    @RequestMapping(path = "/byTotalHours", method = RequestMethod.GET)
-    public List<Shift> getShiftsByTotalHours(
-            @RequestParam int minHours,
-            @RequestParam int maxHours,
-            @RequestParam boolean isAvailable
-    ) {
-        return shiftDao.getShiftByTotalHours(minHours, maxHours, isAvailable);
-    }
-
-    @RequestMapping(path = "/byZipcode", method = RequestMethod.GET)
-    public List<Shift> getShiftsByZipcode(
-            @RequestParam String zipcode,
-            @RequestParam boolean isAvailable
-    ) {
-        return shiftDao.getShiftByZipcode(zipcode, isAvailable);
     }
 
     @DeleteMapping("/{shiftId}")
@@ -59,6 +48,15 @@ public class ShiftController {
     public Shift createShift(@RequestBody Shift shift) {
         try {
             return shiftDao.createShift(shift);
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping
+    public Shift updateShift(@RequestBody Shift shift) {
+        try {
+            return shiftDao.updateShift(shift);
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

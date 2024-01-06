@@ -10,24 +10,26 @@ public interface ShiftDao {
     Shift getShiftById(int shiftId);
 
     // Get all available shifts with client names
-    List<Shift> getAvailableShifts(boolean isAvailable);
+    List<Shift> getAvailableShifts();
 
     // Get shifts from datastore by client ID with client names
-    List<Shift> getShiftByClientId(int clientId, boolean isAvailable);
+    List<Shift> getShiftByClientId(int clientId);
 
     // Get shifts from datastore by service ID with client names
     List<Shift> getShiftByServiceName(String serviceName);
 
     // Get shifts from datastore by total hours with client names
-    List<Shift> getShiftByTotalHours(int minHours, int maxHours, boolean isAvailable);
+    List<Shift> getShiftByTotalHours(int minHours, int maxHours);
 
     // Get shifts from teh datastore by zipcode with client names
-    List<Shift> getShiftByZipcode(String zipcode, boolean isAvailable);
+    List<Shift> getShiftByZipcode(String zipcode);
 
     // Remove a shift from datastore by its ID
     public void removeShift (int shiftId);
 
     Shift createShift(Shift shift);
+
+    Shift updateShift(Shift shift);
 
 
 }

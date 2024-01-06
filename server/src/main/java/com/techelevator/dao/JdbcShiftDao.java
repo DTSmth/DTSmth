@@ -58,7 +58,7 @@ public class JdbcShiftDao implements ShiftDao {
     }
 
     @Override
-    public List<Shift> getAvailableShifts(boolean isAvailable) {
+    public List<Shift> getAvailableShifts() {
         String sql = "SELECT " +
                 " s.*, " +
                 "c.first_name, " +
@@ -67,12 +67,12 @@ public class JdbcShiftDao implements ShiftDao {
                 "FROM shift s " +
                 "JOIN client c ON s.client_id = c.client_id " +
                 "JOIN service se ON s.service_id = se.service_id " +
-                "WHERE s.available = ?";
-        return jdbcTemplate.query(sql, MAPPER, isAvailable);
+                "WHERE s.available = true";
+        return jdbcTemplate.query(sql, MAPPER);
     }
 
     @Override
-    public List<Shift> getShiftByClientId(int clientId, boolean isAvailable) {
+    public List<Shift> getShiftByClientId(int clientId) {
         String sql = "SELECT " +
                 " s.*, " +
                 "c.first_name, " +
@@ -82,8 +82,8 @@ public class JdbcShiftDao implements ShiftDao {
                 "JOIN client c ON s.client_id = c.client_id " +
                 "JOIN service se ON s.service_id = se.service_id " +
                 "WHERE s.client_id = ? " +
-                "AND s.available = ?";
-        return jdbcTemplate.query(sql, MAPPER, clientId, isAvailable);
+                "AND s.available = true";
+        return jdbcTemplate.query(sql, MAPPER, clientId);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class JdbcShiftDao implements ShiftDao {
 
 
     @Override
-    public List<Shift> getShiftByTotalHours(int minHours, int maxHours, boolean isAvailable) {
+    public List<Shift> getShiftByTotalHours(int minHours, int maxHours) {
         String sql = "SELECT " +
                 " s.*, " +
                 "c.first_name, " +
@@ -113,12 +113,12 @@ public class JdbcShiftDao implements ShiftDao {
                 "JOIN client c ON s.client_id = c.client_id " +
                 "JOIN service se ON s.service_id = se.service_id " +
                 "WHERE s.total_hours BETWEEN ? AND ? " +
-                "AND s.available = ?";
-        return jdbcTemplate.query(sql, MAPPER, minHours, maxHours, isAvailable);
+                "AND s.available = true";
+        return jdbcTemplate.query(sql, MAPPER, minHours, maxHours);
     }
 
     @Override
-    public List<Shift> getShiftByZipcode(String zipcode, boolean isAvailable) {
+    public List<Shift> getShiftByZipcode(String zipcode) {
         String sql = "SELECT " +
                 " s.*, " +
                 "c.first_name, " +
@@ -127,8 +127,8 @@ public class JdbcShiftDao implements ShiftDao {
                 "FROM shift s " +
                 "JOIN client c ON s.client_id = c.client_id " +
                 "JOIN service se ON s.service_id = se.service_id " +
-                "WHERE s.zipcode = ? AND s.available = ?";
-        return jdbcTemplate.query(sql, MAPPER, zipcode, isAvailable);
+                "WHERE s.zipcode = ? AND s.available = true";
+        return jdbcTemplate.query(sql, MAPPER, zipcode);
     }
 
     @Override
@@ -159,5 +159,29 @@ public class JdbcShiftDao implements ShiftDao {
         String sql = "INSERT into SHIFT (client_id, service_id, total_hours, zipcode, available) VALUES (?,?,?,?,?) RETURNING shift_id";
         Integer shiftId = jdbcTemplate.queryForObject(sql, Integer.class, clientId, serviceId, shift.getTotalHours(), shift.getZipcode(), shift.isAvailable());
         return getShiftById(shiftId);
+    }
+
+    @Override
+    public Shift updateShift(Shift shift) {
+        int clientId = shift.getClientId();
+        if (clientId <= 0) {
+            List<Client> clients = clientDao.getClientByFirstNameLastName(shift.getFirstName(), shift.getLastName());
+            Client client = clients.isEmpty() ? null : clients.get(0);
+            if (client == null ) {
+                throw new DaoException(String.format("Client %s %s does not exist", shift.getFirstName(), shift.getLastName()));
+            }
+            clientId = client.getClientId();
+        }
+        int serviceId = shift.getServiceId();
+        if (serviceId <= 0 ) {
+            Service service = serviceDao.getServiceByName(shift.getServiceName());
+            if (service == null) {
+                throw new DaoException(String.format("Service %s does not exist", shift.getServiceName()));
+            }
+            serviceId = service.getServiceId();
+        }
+        String sql = "UPDATE shift SET client_id = ?, service_id = ?, total_hours = ?, zipcode = ?, available = ? WHERE shift_id = ?";
+        jdbcTemplate.update(sql, clientId, serviceId, shift.getTotalHours(), shift.getZipcode(), shift.isAvailable(), shift.getShiftId());
+        return getShiftById(shift.getShiftId());
     }
 }
