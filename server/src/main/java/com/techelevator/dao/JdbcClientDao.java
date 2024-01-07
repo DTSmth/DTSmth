@@ -50,7 +50,7 @@ public class JdbcClientDao implements ClientDao {
     }
 
     @Override
-    public List<Client> getClients() {
+    public List<Client> getAllClients() {
         String sql = "SELECT * FROM client";
         try {
             return jdbcTemplate.query(sql, MAPPER);
@@ -69,6 +69,20 @@ public class JdbcClientDao implements ClientDao {
     public List<Client> getClientByZipCode(String zipcode) {
         String sql = "SELECT * FROM client WHERE zipcode = ?";
         return jdbcTemplate.query(sql, MAPPER, zipcode);
+    }
+
+    @Override
+    public Client createClient(Client client) {
+        String sql = "INSERT INTO client (first_name, last_name, has_personal_care, has_lifting, address_1, address_2, zipcode, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING client_id";
+        Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, client.getName(), client.getLastName(), client.isHasPersonalCare(), client.isHasLifting(), client.getAddress1(), client.getAddress2(), client.getZipcode(), client.getPhoneNumber());
+        return getClientById(newId);
+    }
+
+    @Override
+    public Client updateClient(Client client) {
+        String sql = "UPDATE client SET first_name = ?, last_name = ?, has_personal_care = ?, has_lifting = ?, address_1 = ?, address_2 = ?, zipcode = ?, phone_number = ? WHERE client_id = ?";
+        jdbcTemplate.update(sql, client.getName(), client.getLastName(), client.isHasPersonalCare(), client.isHasLifting(), client.getAddress1(), client.getAddress2(), client.getZipcode(), client.getPhoneNumber(), client.getClientId());
+        return getClientById(client.getClientId());
     }
 
 }

@@ -5,9 +5,8 @@ import java.util.Objects;
 public class Client {
 
     private int clientId;
-    private String name;
+    private String firstName;
     private String lastName;
-
     private boolean hasPersonalCare;
     private boolean hasLifting;
     private String address1;
@@ -15,9 +14,9 @@ public class Client {
     private String zipcode;
     private String phoneNumber;
 
-    public Client(int clientId, String name, String lastName, boolean hasPersonalCare, boolean hasLifting, String address1, String address2, String zipcode, String phoneNumber) {
+    public Client(int clientId, String firstName, String lastName, boolean hasPersonalCare, boolean hasLifting, String address1, String address2, String zipcode, String phoneNumber) {
         this.clientId = clientId;
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.hasPersonalCare = hasPersonalCare;
         this.hasLifting = hasLifting;
@@ -36,11 +35,23 @@ public class Client {
     }
 
     public String getName() {
-        return name;
+        return firstName + " " + lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String setFirstName(String firstName) {
+        return this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String setLastName(String lastName) {
+        return this.lastName = lastName;
     }
 
     public boolean isHasPersonalCare() {
@@ -95,7 +106,7 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "clientId=" + clientId +
-                ", name='" + name + '\'' +
+                ", name='" + getName() + '\'' +
                 ", hasPersonalCare=" + hasPersonalCare +
                 ", hasLifting=" + hasLifting +
                 ", address1='" + address1 + '\'' +
@@ -110,11 +121,11 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return clientId == client.clientId && hasPersonalCare == client.hasPersonalCare && hasLifting == client.hasLifting && Objects.equals(name, client.name) && Objects.equals(address1, client.address1) && Objects.equals(address2, client.address2) && Objects.equals(zipcode, client.zipcode) && Objects.equals(phoneNumber, client.phoneNumber);
+        return clientId == client.clientId && hasPersonalCare == client.hasPersonalCare && hasLifting == client.hasLifting && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(address1, client.address1) && Objects.equals(address2, client.address2) && Objects.equals(zipcode, client.zipcode) && Objects.equals(phoneNumber, client.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, name, hasPersonalCare, hasLifting, address1, address2, zipcode, phoneNumber);
+        return Objects.hash(clientId, firstName, lastName, hasPersonalCare, hasLifting, address1, address2, zipcode, phoneNumber);
     }
 }

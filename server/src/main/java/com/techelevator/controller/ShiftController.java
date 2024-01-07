@@ -21,14 +21,14 @@ public class ShiftController {
         this.shiftDao = shiftDao;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public List<Shift> getAllShifts(
             @RequestParam(required = false) String serviceName,
             @RequestParam(required = false) Integer minHours,
             @RequestParam(required = false) Integer maxHours,
             @RequestParam(required = false) String zipcode
     ) {
-        if (!serviceName.isEmpty()) {
+        if (serviceName != null && !serviceName.isEmpty()) {
             return shiftDao.getShiftByServiceName(serviceName);
         } else if (minHours != null && maxHours != null) {
             return shiftDao.getShiftByTotalHours(minHours, maxHours);

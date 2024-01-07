@@ -10,7 +10,7 @@ public interface ClientDao {
     Client getClientById(int id);
 
     // get a list of all clients
-    List<Client> getClients();
+    List<Client> getAllClients();
 
     // Find clients by first name and last name
     List<Client> getClientByFirstNameLastName(String firstname, String lastname);
@@ -18,5 +18,10 @@ public interface ClientDao {
     // Find client by zip code
     List<Client> getClientByZipCode(String zipcode);
 
+    // Create a new client
+    Client createClient(Client client);
+
+    // Update a client
+    Client updateClient(Client client);
 
 }
