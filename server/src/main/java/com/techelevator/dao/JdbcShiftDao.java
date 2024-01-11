@@ -101,6 +101,21 @@ public class JdbcShiftDao implements ShiftDao {
         return jdbcTemplate.query(sql, MAPPER, serviceName);
     }
 
+    @Override
+    public List<Shift> getShiftByClientName(String firstName, String lastName) {
+        String sql = "SELECT " +
+                " s.*, " +
+                "c.first_name, " +
+                "c.last_name, " +
+                "se.service_name " +
+                "FROM shift s " +
+                "JOIN client c ON s.client_id = c.client_id " +
+                "JOIN service se ON s.service_id = se.service_id " +
+                "WHERE c.first_name = ? AND c.last_name = ? " +
+                "AND s.available = true";
+        return jdbcTemplate.query(sql, MAPPER, firstName, lastName);
+    }
+
 
     @Override
     public List<Shift> getShiftByTotalHours(int minHours, int maxHours) {
@@ -156,6 +171,13 @@ public class JdbcShiftDao implements ShiftDao {
             }
             serviceId = service.getServiceId();
         }
+
+        // Insert or update the client-service relationship
+        String clientServiceSql = "INSERT INTO client_service (client_id, service_id) VALUES (?, ?) ON CONFLICT (client_id, service_id) DO NOTHING";
+
+        jdbcTemplate.update(clientServiceSql, clientId, serviceId);
+
+
         String sql = "INSERT into SHIFT (client_id, service_id, total_hours, zipcode, available) VALUES (?,?,?,?,?) RETURNING shift_id";
         Integer shiftId = jdbcTemplate.queryForObject(sql, Integer.class, clientId, serviceId, shift.getTotalHours(), shift.getZipcode(), shift.isAvailable());
         return getShiftById(shiftId);

@@ -21,8 +21,11 @@ public interface ShiftDao {
     // Get shifts from datastore by total hours with client names
     List<Shift> getShiftByTotalHours(int minHours, int maxHours);
 
-    // Get shifts from teh datastore by zipcode with client names
+    // Get shifts from the datastore by zipcode with client names
     List<Shift> getShiftByZipcode(String zipcode);
+
+    // Get shifts from the datastore by client name with client names
+    List<Shift> getShiftByClientName(String firstName, String lastName);
 
     // Remove a shift from datastore by its ID
     public void removeShift (int shiftId);

@@ -44,8 +44,16 @@ public class ClientController {
 
     @PutMapping("/{id}")
     public Client updateClient(@PathVariable int id, @RequestBody Client client) {
+        client.setClientId(id);
         return clientDao.updateClient(client);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteClient(@PathVariable int id) {
+    	clientDao.deleteClient(id);
+    }
+
+
 
 
 

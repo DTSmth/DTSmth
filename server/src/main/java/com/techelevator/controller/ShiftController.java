@@ -26,7 +26,9 @@ public class ShiftController {
             @RequestParam(required = false) String serviceName,
             @RequestParam(required = false) Integer minHours,
             @RequestParam(required = false) Integer maxHours,
-            @RequestParam(required = false) String zipcode
+            @RequestParam(required = false) String zipcode,
+            @RequestParam(required = false) String clientFirstName,
+            @RequestParam(required = false) String clientLastName
     ) {
         if (serviceName != null && !serviceName.isEmpty()) {
             return shiftDao.getShiftByServiceName(serviceName);
@@ -34,6 +36,8 @@ public class ShiftController {
             return shiftDao.getShiftByTotalHours(minHours, maxHours);
         } else if (zipcode != null) {
             return shiftDao.getShiftByZipcode(zipcode);
+        } else if (clientFirstName != null && clientLastName != null) {
+            return shiftDao.getShiftByClientName(clientFirstName, clientLastName);
         } else {
             return shiftDao.getAvailableShifts();
         }
@@ -60,6 +64,11 @@ public class ShiftController {
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+
+    @GetMapping("/{shiftId}")
+    public Shift getShiftById(@PathVariable int shiftId) {
+        return shiftDao.getShiftById(shiftId);
     }
 
 }

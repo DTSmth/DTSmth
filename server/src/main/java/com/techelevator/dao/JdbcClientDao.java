@@ -74,15 +74,21 @@ public class JdbcClientDao implements ClientDao {
     @Override
     public Client createClient(Client client) {
         String sql = "INSERT INTO client (first_name, last_name, has_personal_care, has_lifting, address_1, address_2, zipcode, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING client_id";
-        Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, client.getName(), client.getLastName(), client.isHasPersonalCare(), client.isHasLifting(), client.getAddress1(), client.getAddress2(), client.getZipcode(), client.getPhoneNumber());
+        Integer newId = jdbcTemplate.queryForObject(sql, Integer.class, client.getFirstName(), client.getLastName(), client.isHasPersonalCare(), client.isHasLifting(), client.getAddress1(), client.getAddress2(), client.getZipcode(), client.getPhoneNumber());
         return getClientById(newId);
     }
 
     @Override
     public Client updateClient(Client client) {
         String sql = "UPDATE client SET first_name = ?, last_name = ?, has_personal_care = ?, has_lifting = ?, address_1 = ?, address_2 = ?, zipcode = ?, phone_number = ? WHERE client_id = ?";
-        jdbcTemplate.update(sql, client.getName(), client.getLastName(), client.isHasPersonalCare(), client.isHasLifting(), client.getAddress1(), client.getAddress2(), client.getZipcode(), client.getPhoneNumber(), client.getClientId());
+        jdbcTemplate.update(sql, client.getFirstName(), client.getLastName(), client.isHasPersonalCare(), client.isHasLifting(), client.getAddress1(), client.getAddress2(), client.getZipcode(), client.getPhoneNumber(), client.getClientId());
         return getClientById(client.getClientId());
+    }
+
+    @Override
+    public void deleteClient(int id) {
+    	String sql = "DELETE FROM client WHERE client_id = ?";
+    	jdbcTemplate.update(sql, id);
     }
 
 }

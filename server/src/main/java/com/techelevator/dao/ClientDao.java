@@ -24,4 +24,7 @@ public interface ClientDao {
     // Update a client
     Client updateClient(Client client);
 
+    // Delete a client
+    void deleteClient(int id);
+
 }
