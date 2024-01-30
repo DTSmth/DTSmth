@@ -1,24 +1,15 @@
 
 <template>
   <div>
-    
-    <header>
-      <h1> Abound Recruiting</h1>
-    </header>
-    <section>
-      <ClientInfo />
-    </section>
+    <router-view />
   </div>
 </template>
 
 <script>
-import ClientInfo from './components/ClientInfo.vue'; // Import the component
  
 export default {
   name: 'App',
-  components: {
-    ClientInfo // Add the component to your component list
-  }
+  
 }
 
 </script>

@@ -1,13 +1,26 @@
 <template>
     <div>
-        <!-- Your component's HTML template goes here -->
+        <header>
+            <h1>Abound Recruiting</h1>
+        </header>
+        <section>
+            <ClientsList />
+        </section>
     </div>
 </template>
 
+<!-- // clean this up ^^^^ -->
+
 <script>
+import ClientsList from '../components/ClientsList.vue'; // Import the component
+
+
 export default {
     name: 'RecruiterMatchingView',
-    // Your component's JavaScript logic goes here
+    components: {
+    ClientsList 
+  }
+   
 }
 </script>
 
