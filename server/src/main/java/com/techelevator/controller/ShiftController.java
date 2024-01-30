@@ -5,7 +5,6 @@ import com.techelevator.dao.ShiftDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Shift;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/shifts")
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 public class ShiftController {
     private final ShiftDao shiftDao;
 

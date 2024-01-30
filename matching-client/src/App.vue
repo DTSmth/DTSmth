@@ -1,6 +1,7 @@
 
 <template>
   <div>
+    
     <header>
       <h1> Testing dashboard</h1>
     </header>
