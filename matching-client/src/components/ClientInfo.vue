@@ -1,15 +1,34 @@
 <template>
-    <div class="client" v-for="client in clients" v-bind:key="clients.id">
-        <span>{{ client.firstName }} </span>
-        <span>{{ client.lastName }} </span>
-        <span>{{ client.hasPersonalCare }}</span>
-        <span>{{ client.hasLifting }}</span>
-        <span>{{ client.address1 }}</span>
-        <span>{{ client.address2 }}</span>
-        <span>{{ client.zipcode }}</span>
-        <span>{{ client.phoneNumber }}</span>
-
-        
+    <div class="search-bar">
+      <input v-model="search" placeholder="Search...">
+    </div>
+    <div class="table-container">
+        <table class="client-table">
+        <thead>
+            <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Personal Care</th>
+            <th>Lifting</th>
+            <th>Address 1</th>
+            <th>Address 2</th>
+            <th>Zipcode</th>
+            <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="client in clients" :key="client.id">
+            <td>{{ client.firstName }}</td>
+            <td>{{ client.lastName }}</td>
+            <td>{{ client.hasPersonalCare }}</td>
+            <td>{{ client.hasLifting }}</td>
+            <td>{{ client.address1 }}</td>
+            <td>{{ client.address2 }}</td>
+            <td>{{ client.zipcode }}</td>
+            <td>{{ client.phoneNumber }}</td>
+            </tr>
+        </tbody>
+        </table>
     </div>
 </template>
 
@@ -34,6 +53,17 @@ export default {
                 });
         }
     },
+    computed: {
+    filteredClients() {
+      return this.clients.filter(client =>
+        client.firstName.toLowerCase().includes(this.search.toLowerCase()) ||
+        client.lastName.toLowerCase().includes(this.search.toLowerCase())
+        
+      );
+    }
+  },
+
+
     created() {
         console.log('calling get clients')
         this.getClients()
@@ -43,5 +73,32 @@ export default {
 </script>
 
 <style scoped>
-/* Your style code here */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.table-container {
+  display: flex;
+  justify-content: center;
+}
+
+.client-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.client-table th, .client-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.client-table th {
+  background-color: #f2f2f2;
+}
 </style>

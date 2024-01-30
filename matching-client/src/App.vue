@@ -3,7 +3,7 @@
   <div>
     
     <header>
-      <h1> Testing dashboard</h1>
+      <h1> Abound Recruiting</h1>
     </header>
     <section>
       <ClientInfo />
