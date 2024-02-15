@@ -26,4 +26,5 @@ export default {
 
 <style scoped>
 /* Your component's CSS styles go here */
+
 </style>

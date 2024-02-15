@@ -6,17 +6,24 @@ const api = axios.create({
 
 export default {
     
-    list: () => api.get('/clients'),
+    listClients: () => api.get('/clients'),
 
-    get: (id) => api.get(`/clients/${id}`),
+    getClient: (id) => api.get(`/clients/${id}`),
 
-    update: (id, client) => api.put(`/clients/${id}`, client),
+    updateClient: (id, client) => api.put(`/clients/${id}`, client),
 
-    create: (client) => api.post('/clients', client),
+    createClient: (client) => api.post('/clients', client),
 
-    delete: (id) => api.delete(`/clients/${id}`)
+    deleteClient: (id) => api.delete(`/clients/${id}`),
 
+    listShifts: () => api.get('/shifts'),
 
+    getShift: (id) => api.get(`/shifts/${id}`),
 
+    updateShift: (id, shift) => api.put(`/shifts/${id}`, shift),
+
+    createShift: (shift) => api.post('/shifts', shift),
+
+    deleteShift: (id) => api.delete(`/shifts/${id}`)
 
 }

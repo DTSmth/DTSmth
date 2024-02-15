@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         getClients() {
-            apiService.list()
+            apiService.listClients()
                 .then(response => {
                     this.clients = response.data;
                     console.log('in then ' + this.clients)
@@ -46,7 +46,7 @@ export default {
                 .catch(error => {
                     console.log(error);
                 });
-        }
+        },
     },
     computed: {
     filteredClients() {
@@ -68,6 +68,7 @@ export default {
 </script>
 
 <style>
+
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
@@ -85,16 +86,41 @@ body {
 .client-table {
   width: 100%;
   border-collapse: collapse;
+  background-color: #DC755D;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.client-table th, .client-table td {
+.client-table th,
+.client-table td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: left;
 }
 
 .client-table th {
-  background-color: #f2f2f2;
+  background-color: #5ABE8D;
+  font-weight: bold;
+}
+
+.client-table tbody tr:nth-child(even) {
+  background-color: #B1DFFC;
+}
+
+.client-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.client-table td {
+  color: #333;
+}
+
+.client-table td a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.client-table td a:hover {
+  text-decoration: underline;
 }
 
 
