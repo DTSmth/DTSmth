@@ -86,7 +86,7 @@ body {
 .client-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #DC755D;
+  background-color: #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -98,8 +98,9 @@ body {
 }
 
 .client-table th {
-  background-color: #5ABE8D;
+  background-color: #1A1348;
   font-weight: bold;
+  color: #fff;
 }
 
 .client-table tbody tr:nth-child(even) {
@@ -108,6 +109,7 @@ body {
 
 .client-table tbody tr:hover {
   background-color: #f5f5f5;
+  cursor: pointer;
 }
 
 .client-table td {
