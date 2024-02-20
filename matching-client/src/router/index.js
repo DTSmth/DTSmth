@@ -1,13 +1,13 @@
 import { createRouter as _createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/HomeView.vue'
+import HomeView from '../views/HomeView.vue'
 import RecruiterMatchingView from '../views/RecruiterMatchingView.vue'
 import RecruiterShiftsView from '../views/RecruiterShiftsView.vue'
-import ClientShiftsView from '../views/ClientShiftsView.vue'
+import RecruiterClientShiftsView from '../views/RecruiterClientShiftsView.vue'
 
 const routes = [
     {
         path: '/',
-        component: Home,
+        component: HomeView,
         name: 'Home'
     },
     {   
@@ -24,7 +24,7 @@ const routes = [
     },
     {
         path: '/recruiting/clients/:clientId/shifts',
-        component: ClientShiftsView,
+        component: RecruiterClientShiftsView,
         name: 'ClientShiftsView',
         props: true
     }

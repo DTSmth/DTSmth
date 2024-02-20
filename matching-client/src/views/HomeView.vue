@@ -1,16 +1,35 @@
 <template>
     <div>
-        <!-- Your component's HTML template goes here -->
+       <AppHeader />
     </div>
+    <div>
+        <input type="text" v-model="username" placeholder="Username">
+        <input type="password" v-model="password" placeholder="Password">
+    </div>  
 </template>
 
 <script>
+import AppHeader from '../components/AppHeader.vue';
+
+
 export default {
     name: 'HomeView',
-    // Your component's JavaScript logic goes here
+    components: {
+        AppHeader
+    }
+    
 }
+
 </script>
 
 <style scoped>
-/* Your component's CSS styles go here */
+
+input[type="text"],
+input[type="password"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
 </style>
