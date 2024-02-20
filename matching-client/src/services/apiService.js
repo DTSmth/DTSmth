@@ -24,6 +24,8 @@ export default {
 
     createShift: (shift) => api.post('/shifts', shift),
 
-    deleteShift: (id) => api.delete(`/shifts/${id}`)
+    deleteShift: (id) => api.delete(`/shifts/${id}`),
+
+    getClientShifts: (clientId) => api.get(`/clients/${clientId}/shifts`),
 
 }

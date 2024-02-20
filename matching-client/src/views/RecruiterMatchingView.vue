@@ -1,24 +1,23 @@
 <template>
     <div>
-        <header>
-            <h1>Abound Recruiting</h1>
-        </header>
+        <div>
+            <AppHeader />
+        </div>
         <section>
             <ClientsList />
         </section>
     </div>
 </template>
 
-<!-- // clean this up ^^^^ -->
-
 <script>
-import ClientsList from '../components/ClientsList.vue'; // Import the component
-
+import ClientsList from '../components/ClientsList.vue';
+import AppHeader from '../components/AppHeader.vue';
 
 export default {
     name: 'RecruiterMatchingView',
     components: {
-    ClientsList 
+    ClientsList,
+    AppHeader 
   }
    
 }

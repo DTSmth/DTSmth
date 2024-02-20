@@ -206,4 +206,18 @@ public class JdbcShiftDao implements ShiftDao {
         jdbcTemplate.update(sql, clientId, serviceId, shift.getTotalHours(), shift.getZipcode(), shift.isAvailable(), shift.getShiftId());
         return getShiftById(shift.getShiftId());
     }
+
+    @Override
+    public List<Shift> getShiftByClientID(int clientId) {
+        String sql = "SELECT " +
+                " s.*, " +
+                "c.first_name, " +
+                "c.last_name, " +
+                "se.service_name " +
+                "FROM shift s " +
+                "JOIN client c ON s.client_id = c.client_id " +
+                "JOIN service se ON s.service_id = se.service_id " +
+                "WHERE s.client_id = ? AND s.available = true";
+        return jdbcTemplate.query(sql, MAPPER, clientId);
+    }
 }

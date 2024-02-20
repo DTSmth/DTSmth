@@ -1,7 +1,9 @@
 package com.techelevator.controller;
 
 import com.techelevator.dao.ClientDao;
+import com.techelevator.dao.ShiftDao;
 import com.techelevator.model.Client;
+import com.techelevator.model.Shift;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.List;
 public class ClientController {
 
     private final ClientDao clientDao;
+    private final ShiftDao shiftDao;
 
-    public ClientController(ClientDao clientDao) {
+    public ClientController(ClientDao clientDao, ShiftDao shiftDao) {
         this.clientDao = clientDao;
+        this.shiftDao = shiftDao;
     }
 
     @GetMapping()
@@ -53,9 +57,9 @@ public class ClientController {
     	clientDao.deleteClient(id);
     }
 
-
-
-
-
+    @GetMapping("/{id}/shifts")
+    public List<Shift> getClientShiftsById(@PathVariable int id) {
+        return shiftDao.getShiftByClientID(id);
+    }
 
 }

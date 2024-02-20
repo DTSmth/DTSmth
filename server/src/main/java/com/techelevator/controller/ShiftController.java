@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(path = "/shifts")
 //@PreAuthorize("isAuthenticated()")
 public class ShiftController {
@@ -56,9 +57,8 @@ public class ShiftController {
         }
     }
 
-    // This needs to be changed use a path variable
-    @PutMapping
-    public Shift updateShift(@RequestBody Shift shift) {
+    @PutMapping("/{shiftId}")
+    public Shift updateShift(@PathVariable int shiftId, @RequestBody Shift shift) {
         try {
             return shiftDao.updateShift(shift);
         } catch (DaoException e) {
@@ -70,5 +70,6 @@ public class ShiftController {
     public Shift getShiftById(@PathVariable int shiftId) {
         return shiftDao.getShiftById(shiftId);
     }
+
 
 }

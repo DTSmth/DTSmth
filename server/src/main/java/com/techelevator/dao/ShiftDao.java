@@ -34,5 +34,6 @@ public interface ShiftDao {
 
     Shift updateShift(Shift shift);
 
+    List<Shift> getShiftByClientID(int clientId);
 
 }

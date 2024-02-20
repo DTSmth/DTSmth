@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr v-on:dblclick="goToClientShiftView">
         <td>{{ client.firstName }}</td>
         <td>{{ client.lastName }}</td>
         <td>{{ client.hasPersonalCare }}</td>
@@ -23,7 +23,9 @@ export default {
         };
     },
     methods: {
-        // Your component's methods go here
+        goToClientShiftView() {
+            this.$router.push({ name: 'ClientShiftsView', params: { clientId: this.client.clientId } });
+        }
     },
     mounted() {
         // Code to run when the component is mounted goes here
