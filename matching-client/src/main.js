@@ -4,8 +4,28 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createStore} from './store'
 import { createRouter} from './router'
+import axios from 'axios'
 
-const store = createStore();
+
+axios.defaults.baseURL = 'http://localhost:9000'
+
+
+
+/*
+ * The authorization header is set for axios when you login but what happens when 
+ * you come back or the page is refreshed. When that happens you need to check 
+ * for the token in local storage and if it exists you should set the header 
+ * so that it will be attached to each request.
+ */
+let currentToken = localStorage.getItem('token');
+let currentUser = JSON.parse(localStorage.getItem('user'));
+
+if (currentToken) {
+  // Set token axios requests
+  axios.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
+}
+
+const store = createStore(currentToken, currentUser);
 const router = createRouter();
 
 

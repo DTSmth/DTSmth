@@ -1,31 +1,33 @@
 import axios from 'axios';
 
-const api = axios.create({
-    baseURL: 'http://localhost:9000'
-});
+// const api = axios.create({
+//     baseURL: 'http://localhost:9000'
+// });
 
 export default {
     
-    listClients: () => api.get('/clients'),
+    listClients: () => axios.get('/clients'),
 
-    getClient: (id) => api.get(`/clients/${id}`),
+    getClient: (id) => axios.get(`/clients/${id}`),
 
-    updateClient: (id, client) => api.put(`/clients/${id}`, client),
+    updateClient: (id, client) => axios.put(`/clients/${id}`, client),
 
-    createClient: (client) => api.post('/clients', client),
+    createClient: (client) => axios.post('/clients', client),
 
-    deleteClient: (id) => api.delete(`/clients/${id}`),
+    deleteClient: (id) => axios.delete(`/clients/${id}`),
 
-    listShifts: () => api.get('/shifts'),
+    listShifts: () => axios.get('/shifts'),
 
-    getShift: (id) => api.get(`/shifts/${id}`),
+    getShift: (id) => axios.get(`/shifts/${id}`),
 
-    updateShift: (id, shift) => api.put(`/shifts/${id}`, shift),
+    updateShift: (id, shift) => axios.put(`/shifts/${id}`, shift),
 
-    createShift: (shift) => api.post('/shifts', shift),
+    createShift: (shift) => axios.post('/shifts', shift),
 
-    deleteShift: (id) => api.delete(`/shifts/${id}`),
+    deleteShift: (id) => axios.delete(`/shifts/${id}`),
 
-    getClientShifts: (clientId) => api.get(`/clients/${clientId}/shifts`),
+    getClientShifts: (clientId) => axios.get(`/clients/${clientId}/shifts`),
+
+    login: (credentials) => axios.post('/login', credentials),
 
 }
