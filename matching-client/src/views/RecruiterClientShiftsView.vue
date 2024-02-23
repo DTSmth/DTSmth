@@ -13,7 +13,7 @@ import apiService from '../services/apiService';
 import AppHeader from '../components/AppHeader.vue';
 
 export default {
-  name: 'ClientShiftsView',
+  
   data() {
     return {
       shifts: [],

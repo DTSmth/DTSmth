@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import RecruiterMatchingView from '../views/RecruiterMatchingView.vue'
 import RecruiterShiftsView from '../views/RecruiterShiftsView.vue'
 import RecruiterClientShiftsView from '../views/RecruiterClientShiftsView.vue'
+import RecruiterSingleShiftView from '../views/RecruiterSingleShiftView.vue'
 import { useStore } from 'vuex'
 
 const routes = [
@@ -30,6 +31,13 @@ const routes = [
         path: '/recruiting/clients/:clientId/shifts',
         component: RecruiterClientShiftsView,
         name: 'ClientShiftsView',
+        props: true,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/recruiting/clients/:clientId/:shiftId',
+        component: RecruiterSingleShiftView,
+        name: 'RecruiterSingleShiftView',
         props: true,
         meta: { requiresAuth: true }
     }
