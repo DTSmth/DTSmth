@@ -47,6 +47,8 @@ I am a passionate software engineer specializing in building robust backends wit
 ![Agile](https://img.shields.io/badge/Agile-blueviolet?style=for-the-badge&logo=asana&logoColor=white)
 > **Testing Proficiency:** JUnit, Integration Testing, Unit Testing
 
+### Certificates
+[![AWS Badge](https://img.shields.io/badge/AWS-Certified_Cloud_Practitioner-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://www.credly.com/badges/687c1319-2d5e-4de4-b836-7ff07da55611/public_url)
 ---
 
 ### 🤝 Connect with me
