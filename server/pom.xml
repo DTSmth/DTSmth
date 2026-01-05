@@ -9,7 +9,7 @@
         <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.techelevator</groupId>
+    <groupId>com.d424</groupId>
     <artifactId>side</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -21,11 +21,6 @@
     </properties>
 
     <dependencies>
-<!--        will not need starter data jdbc anymore-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-jdbc</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
