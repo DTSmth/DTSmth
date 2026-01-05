@@ -1,25 +1,31 @@
 package com.techelevator.service;
 
-import com.techelevator.dao.UserDao;
+import com.techelevator.dao.UserRepository;
 import com.techelevator.model.User;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 public class UserService {
-    private final UserDao userDao;
 
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public User updateUser(User modifiedUser, String userName) {
-        User user;
-        User loggedInUser = userDao.getUserByUsername(userName);
-        if ((loggedInUser != null) && (loggedInUser.getId() != modifiedUser.getId())) {
+    @Transactional
+    public User updateUser(User modifiedUser, String username) {
+
+        User loggedInUser = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new AccessDeniedException("User not found"));
+
+        if (loggedInUser.getId() != modifiedUser.getId()) {
             throw new AccessDeniedException("Access denied");
         }
-        user = userDao.updateUser(modifiedUser);
-        return user;
+
+        return userRepository.save(modifiedUser);
     }
 }

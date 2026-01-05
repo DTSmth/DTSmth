@@ -1,18 +1,54 @@
 package com.techelevator.model;
 
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+@Entity
+@Table(name = "client")
 public class Client {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "client_id")
     private int clientId;
+
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "has_personal_care")
     private boolean hasPersonalCare;
+    @Column(name = "has_lifting")
     private boolean hasLifting;
+
+    @Column(name = "address_1")
     private String address1;
+    @Column(name = "address_2")
     private String address2;
+
+    @Column(name = "zipcode")
     private String zipcode;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "client")
+    @JsonIgnore
+    private List<Shift> shifts;
+
+    @ManyToMany
+    @JoinTable(
+            name = "client_service",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    @JsonIgnore
+    private Set<Services> services;
 
     public Client(int clientId, String firstName, String lastName, boolean hasPersonalCare, boolean hasLifting, String address1, String address2, String zipcode, String phoneNumber) {
         this.clientId = clientId;
@@ -24,6 +60,9 @@ public class Client {
         this.address2 = address2;
         this.zipcode = zipcode;
         this.phoneNumber = phoneNumber;
+    }
+
+    public Client() {
     }
 
     public int getClientId() {

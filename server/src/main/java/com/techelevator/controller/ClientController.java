@@ -1,66 +1,60 @@
 package com.techelevator.controller;
 
-import com.techelevator.dao.ClientDao;
-import com.techelevator.dao.ShiftDao;
 import com.techelevator.model.Client;
-import com.techelevator.model.Shift;
+import com.techelevator.service.ClientService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/clients")
 @CrossOrigin
-@RequestMapping(path = "/clients")
 @PreAuthorize("isAuthenticated()")
 public class ClientController {
 
-    private final ClientDao clientDao;
-    private final ShiftDao shiftDao;
+    private final ClientService clientService;
 
-    public ClientController(ClientDao clientDao, ShiftDao shiftDao) {
-        this.clientDao = clientDao;
-        this.shiftDao = shiftDao;
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<Client> getAllClients(
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) String zipcode
     ) {
         if (firstName != null && lastName != null) {
-            return clientDao.getClientByFirstNameLastName(firstName, lastName);
+            return clientService.getClientByFirstNameLastName(firstName, lastName);
         } else if (zipcode != null) {
-            return clientDao.getClientByZipCode(zipcode);
+            return clientService.getClientByZipcode(zipcode);
         }
-        return clientDao.getAllClients();
+        return clientService.getAllClients();
     }
 
     @GetMapping("/{id}")
     public Client getClientById(@PathVariable int id) {
-        return clientDao.getClientById(id);
+        return clientService.getClientById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
     }
 
-    @PostMapping()
+    @PostMapping
     public Client createClient(@RequestBody Client client) {
-        return clientDao.createClient(client);
+        return clientService.createClient(client);
     }
 
     @PutMapping("/{id}")
     public Client updateClient(@PathVariable int id, @RequestBody Client client) {
         client.setClientId(id);
-        return clientDao.updateClient(client);
+        return clientService.updateClient(client);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClient(@PathVariable int id) {
-    	clientDao.deleteClient(id);
+        clientService.deleteClient(id);
     }
-
-    @GetMapping("/{id}/shifts")
-    public List<Shift> getClientShiftsById(@PathVariable int id) {
-        return shiftDao.getShiftByClientID(id);
-    }
-
 }

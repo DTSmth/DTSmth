@@ -1,6 +1,8 @@
 package com.techelevator.dao;
 
-import com.techelevator.model.ClientService;
+
+
+import com.techelevator.service.ClientService;
 
 import java.util.List;
 

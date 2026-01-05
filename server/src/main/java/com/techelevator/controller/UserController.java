@@ -1,7 +1,6 @@
 package com.techelevator.controller;
 
-import com.techelevator.dao.UserDao;
-import com.techelevator.exception.DaoException;
+import com.techelevator.dao.UserRepository;
 import com.techelevator.model.User;
 import com.techelevator.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,50 +28,29 @@ import java.util.List;
 @RequestMapping( path = "/users")
 public class UserController {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final UserService userService;
 
-    public UserController(UserDao userDao, UserService userService) {
-        this.userDao = userDao;
+    public UserController(UserRepository userRepository, UserService userService) {
+        this.userRepository = userRepository;
         this.userService = userService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-
-        try {
-            users = userDao.getUsers();
-        }
-        catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-
-        return users;
+        return userRepository.findAll(); // returns List<User>
     }
 
-    @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
+    @GetMapping("/{userId}")
     public User getById(@PathVariable int userId, Principal principal) {
-        User user = null;
-
-        try {
-            user = userDao.getUserById(userId);
-        }
-        catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-
-        return user;
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    @RequestMapping(path = "", method = RequestMethod.PUT)
+    @PutMapping
     public User updateProfile(@RequestBody User modifiedUser, Principal principal) {
-        try {
-            return userService.updateUser(modifiedUser, principal.getName());
-        }
-        catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        // UserService still handles permission checks
+        return userService.updateUser(modifiedUser, principal.getName());
     }
 }

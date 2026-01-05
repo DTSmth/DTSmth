@@ -1,9 +1,7 @@
 package com.techelevator.controller;
 
-
-import com.techelevator.dao.ShiftDao;
-import com.techelevator.exception.DaoException;
 import com.techelevator.model.Shift;
+import com.techelevator.service.ShiftService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,65 +10,60 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/shifts")
 @CrossOrigin
-@RequestMapping(path = "/shifts")
 @PreAuthorize("isAuthenticated()")
 public class ShiftController {
-    private final ShiftDao shiftDao;
 
-    public ShiftController(ShiftDao shiftDao) {
-        this.shiftDao = shiftDao;
+    private final ShiftService shiftService;
+
+    public ShiftController(ShiftService shiftService) {
+        this.shiftService = shiftService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<Shift> getAllShifts(
-            @RequestParam(required = false) String serviceName,
-            @RequestParam(required = false) Integer minHours,
-            @RequestParam(required = false) Integer maxHours,
+            @RequestParam(required = false) Integer clientId,
+            @RequestParam(required = false) Integer serviceId,
             @RequestParam(required = false) String zipcode,
-            @RequestParam(required = false) String clientFirstName,
-            @RequestParam(required = false) String clientLastName
+            @RequestParam(required = false) Boolean available,
+            @RequestParam(required = false) Integer minHours,
+            @RequestParam(required = false) Integer maxHours
     ) {
-        if (serviceName != null && !serviceName.isEmpty()) {
-            return shiftDao.getShiftByServiceName(serviceName);
-        } else if (minHours != null && maxHours != null) {
-            return shiftDao.getShiftByTotalHours(minHours, maxHours);
+        if (clientId != null) {
+            return shiftService.getShiftsByClientId(clientId);
+        } else if (serviceId != null) {
+            return shiftService.getShiftsByServiceId(serviceId);
         } else if (zipcode != null) {
-            return shiftDao.getShiftByZipcode(zipcode);
-        } else if (clientFirstName != null && clientLastName != null) {
-            return shiftDao.getShiftByClientName(clientFirstName, clientLastName);
+            return shiftService.getShiftsByZipcode(zipcode);
+        } else if (available != null && available) {
+            return shiftService.getAvailableShifts();
+        } else if (minHours != null && maxHours != null) {
+            return shiftService.getShiftsByTotalHoursRange(minHours, maxHours);
         } else {
-            return shiftDao.getAvailableShifts();
-        }
-    }
-
-    @DeleteMapping("/{shiftId}")
-    public void removeShift(@PathVariable int shiftId) {
-        shiftDao.removeShift(shiftId);
-    }
-
-    @PostMapping()
-    public Shift createShift(@RequestBody Shift shift) {
-        try {
-            return shiftDao.createShift(shift);
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
-
-    @PutMapping("/{shiftId}")
-    public Shift updateShift(@PathVariable int shiftId, @RequestBody Shift shift) {
-        try {
-            return shiftDao.updateShift(shift);
-        } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return shiftService.getAllShifts();
         }
     }
 
     @GetMapping("/{shiftId}")
     public Shift getShiftById(@PathVariable int shiftId) {
-        return shiftDao.getShiftById(shiftId);
+        return shiftService.getShiftById(shiftId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Shift not found"));
     }
 
+    @PostMapping
+    public Shift createShift(@RequestBody Shift shift) {
+        return shiftService.createShift(shift);
+    }
 
+    @PutMapping("/{shiftId}")
+    public Shift updateShift(@PathVariable int shiftId, @RequestBody Shift shift) {
+        return shiftService.updateShift(shiftId, shift);
+    }
+
+    @DeleteMapping("/{shiftId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteShift(@PathVariable int shiftId) {
+        shiftService.deleteShift(shiftId);
+    }
 }

@@ -39,11 +39,11 @@ CREATE TABLE "shift" (
     CONSTRAINT UQ_shift UNIQUE (client_id, service_id, total_hours, zipcode)
 );
 
-CREATE TABLE "service" (
-    "service_id" int   NOT NULL,
+CREATE TABLE "services" (
+    "services_id" int   NOT NULL,
     "service_name" varchar(40)   NOT NULL,
     CONSTRAINT "pk_service" PRIMARY KEY (
-        "service_id"
+        "services_id"
      ),
     CONSTRAINT "uc_service_service_name" UNIQUE (
         "service_name"
@@ -62,24 +62,15 @@ ALTER TABLE "shift" ADD CONSTRAINT "fk_shift_client_id" FOREIGN KEY("client_id")
 REFERENCES "client" ("client_id");
 
 ALTER TABLE "shift" ADD CONSTRAINT "fk_shift_service" FOREIGN KEY("service_id")
-REFERENCES "service" ("service_id");
+REFERENCES "services" ("service_id");
 
 ALTER TABLE "client_service" ADD CONSTRAINT "fk_client_Service_client_id" FOREIGN KEY("client_id")
 REFERENCES "client" ("client_id");
 
 ALTER TABLE "client_service" ADD CONSTRAINT "fk_client_Service_service_id" FOREIGN KEY("service_id")
-REFERENCES "service" ("service_id");
+REFERENCES "services" ("service_id");
 
 INSERT INTO app_user (username, password_hash, role, display_name, img_url, short_bio)
 	VALUES ('admin','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', null, null, null);
-INSERT INTO app_user (username, password_hash, role, display_name, img_url, short_bio)
-	VALUES ('job_coach','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER', 'Imani',
-		'https://source.boringavatars.com/bauhaus/80/job_coach',
-		'Career coach, specializing in working with students fresh out of college and career changers, with a special interest in technology roles.');
-INSERT INTO app_user (username, password_hash, role, display_name, img_url, short_bio)
-	VALUES ('newbie_coder','$2a$10$We8.y4IV/uQOPT1crppxR.aASgeKFr24ISrkHcqWWSYlxRu4oeqE6','ROLE_USER', null,
-		'https://source.boringavatars.com/beam/80/newbie_coder',
-		'New parent turned coder, with a passion for basketball, stats, and a good laugh.');
-INSERT INTO app_user (username, password_hash, role, display_name, img_url, short_bio)
-	VALUES ('troublemaker','$2a$10$K/XxMq03OaJM4AhLU7YE3eQh1KAd8/gzWIOWLgBqVrb5AoSy.pmSK','ROLE_USER', null, null, null);
+
 

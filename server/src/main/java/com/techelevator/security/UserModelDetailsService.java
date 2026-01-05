@@ -1,6 +1,6 @@
 package com.techelevator.security;
 
-import com.techelevator.dao.UserDao;
+import com.techelevator.dao.UserRepository;
 import com.techelevator.model.Authority;
 import com.techelevator.model.User;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,16 +24,20 @@ public class UserModelDetailsService implements UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(UserModelDetailsService.class);
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
-    public UserModelDetailsService(UserDao userDao) {
-        this.userDao = userDao;
+    public UserModelDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating user '{}'", login);
-        return createSpringSecurityUser(login, userDao.getUserByUsername(login));
+
+        User user = userRepository.findByUsername(login)
+                .orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found"));
+
+        return createSpringSecurityUser(login, user);
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String login, User user) {

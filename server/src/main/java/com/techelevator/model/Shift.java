@@ -1,30 +1,35 @@
 package com.techelevator.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "shift", uniqueConstraints = {@UniqueConstraint(name = "uq_shift", columnNames = {"client_id", "services_id", "total_hours", "zipcode"})})
 public class Shift {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "shift_id")
     private int shiftId;
-    private int clientId;
-    private int serviceId;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "services_id", nullable = false)
+    private Services service;
+
+    @Column(name = "total_hours", nullable = false)
     private int totalHours;
+
+    @Column(nullable = false)
     private String zipcode;
-    private boolean isAvailable;
-    private String firstName;
-    private String lastName;
-    private String serviceName;
 
+    @Column(name = "available", nullable = false)
+    private boolean available;
 
-    public Shift(int shiftId, int clientId, int serviceId, int totalHours, String zipcode, boolean isAvailable, String firstName, String lastName, String serviceName) {
-        this.shiftId = shiftId;
-        this.clientId = clientId;
-        this.serviceId = serviceId;
-        this.totalHours = totalHours;
-        this.zipcode = zipcode;
-        this.isAvailable = isAvailable;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.serviceName = serviceName;
+    public Shift() {
     }
 
     public int getShiftId() {
@@ -35,20 +40,20 @@ public class Shift {
         this.shiftId = shiftId;
     }
 
-    public int getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public int getServiceId() {
-        return serviceId;
+    public Services getService() {
+        return service;
     }
 
-    public void setServiceId(int serviceId) {
-        this.serviceId = serviceId;
+    public void setService(Services service) {
+        this.service = service;
     }
 
     public int getTotalHours() {
@@ -68,62 +73,35 @@ public class Shift {
     }
 
     public boolean isAvailable() {
-        return isAvailable;
+        return available;
     }
 
     public void setAvailable(boolean available) {
-        isAvailable = available;
+        this.available = available;
     }
 
-    public String getFirstName() {
-        return firstName;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shift)) return false;
+        Shift shift = (Shift) o;
+        return shiftId == shift.shiftId;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    @Override
+    public int hashCode() {
+        return Objects.hash(shiftId);
     }
 
     @Override
     public String toString() {
         return "Shift{" +
                 "shiftId=" + shiftId +
-                ", clientId=" + clientId +
-                ", serviceId=" + serviceId +
+                ", client=" + client +
+                ", service=" + service +
                 ", totalHours=" + totalHours +
                 ", zipcode='" + zipcode + '\'' +
-                ", isAvailable=" + isAvailable +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", serviceName='" + serviceName + '\'' +
+                ", available=" + available +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Shift shift = (Shift) o;
-        return shiftId == shift.shiftId && clientId == shift.clientId && serviceId == shift.serviceId && totalHours == shift.totalHours && isAvailable == shift.isAvailable && Objects.equals(zipcode, shift.zipcode) && Objects.equals(firstName, shift.firstName) && Objects.equals(lastName, shift.lastName) && Objects.equals(serviceName, shift.serviceName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(shiftId, clientId, serviceId, totalHours, zipcode, isAvailable, firstName, lastName, serviceName);
     }
 }
