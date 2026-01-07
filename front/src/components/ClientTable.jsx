@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function ClientTable({ clients }) {
+    const navigate = useNavigate();
+
     return (
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <table className="w-full border-collapse text-left text-sm text-gray-500">
@@ -13,9 +17,14 @@ export default function ClientTable({ clients }) {
                 <tbody className="divide-y divide-gray-200">
                 {clients.map((c) => (
                     <tr key={c.clientId} className="hover:bg-gray-50 transition-colors">
-                        {/* Name Column with emphasis */}
                         <td className="px-6 py-4 font-medium text-gray-900">
-                            {c.firstName} {c.lastName}
+                            {/* Wrap name in a button or link */}
+                            <button
+                                onClick={() => navigate(`/shifts?clientId=${c.clientId}`)}
+                                className="text-indigo-600 hover:text-indigo-900 hover:underline text-left"
+                            >
+                                {c.firstName} {c.lastName}
+                            </button>
                         </td>
 
                         {/* Boolean Badges for better scannability */}
