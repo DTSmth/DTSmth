@@ -19,7 +19,6 @@ export default function LoginPage() {
             navigate('/clients');
         } catch (error) {
             console.error("Login failed", error);
-            // You could add an error state here to show a red alert
         } finally {
             setIsLoading(false);
         }

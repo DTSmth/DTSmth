@@ -14,7 +14,7 @@ export default function ShiftTable({ shifts }) {
                 <tbody className="divide-y divide-gray-200">
                 {shifts.map((s) => (
                     <tr key={s.shiftId} className="hover:bg-gray-50 transition-colors">
-                        {/* Service Name - Accessing nested object */}
+                        {/* Service Name */}
                         <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                                 <div className="h-8 w-8 rounded bg-indigo-50 flex items-center justify-center text-indigo-600">
@@ -39,7 +39,7 @@ export default function ShiftTable({ shifts }) {
                             {s.zipcode}
                         </td>
 
-                        {/* Total Hours - Note the camelCase change */}
+                        {/* Total Hours */}
                         <td className="px-6 py-4">
                             <span className="text-gray-900 font-semibold">{s.totalHours}</span>
                             <span className="text-gray-400 ml-1">hrs</span>
