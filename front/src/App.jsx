@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { useState, useEffect } from 'react'; // Added useEffect and useState
+import { useState, useEffect } from 'react';
 import LoginPage from './pages/LoginPage';
 import ClientsPage from './pages/ClientsPage';
 import ShiftsPage from "./pages/ShiftsPage.jsx";
