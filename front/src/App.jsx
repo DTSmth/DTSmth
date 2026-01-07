@@ -5,6 +5,7 @@ import ProtectedRoute from './auth/ProtectedRoute';
 import { AuthProvider } from './auth/AuthContext';
 import Navbar from './components/Navbar';
 import ShiftsPage from "./pages/ShiftsPage.jsx";
+import ReportsPage from "./pages/ReportsPage.jsx";
 
 // 1. Create a Layout wrapper
 function AppLayout() {
@@ -33,6 +34,7 @@ function App() {
                     <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                         <Route path="/clients" element={<ClientsPage />} />
                         <Route path="/shifts" element={<ShiftsPage />} />
+                        <Route path="/reports" element={<ReportsPage />} />
                     </Route>
 
                     {/* Catch-all redirect */}
