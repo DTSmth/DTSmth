@@ -82,7 +82,7 @@ export default function LoginPage() {
                     </form>
 
                     <div className="mt-6 text-center text-xs text-gray-400">
-                        &copy; 2024 Your Agency Name. All rights reserved.
+                        &copy; 2026 Tacos. All rights reserved.
                     </div>
                 </div>
             </div>

@@ -1,24 +1,43 @@
-// src/pages/ShiftsPage.jsx
-import { useState } from 'react'; // Removed useEffect
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { createShift, deleteShift } from '../api/shiftApi';
+import { createShift, deleteShift, updateShift } from '../api/shiftApi';
 import ShiftTable from '../components/ShiftTable';
-import CreateShiftModal from '../components/CreateShiftModal'; // Make sure this file exists!
+import CreateShiftModal from '../components/CreateShiftModal';
 
 export default function ShiftsPage({ shifts, clients, services, refreshData }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingShift, setEditingShift] = useState(null);
 
     const clientIdFilter = searchParams.get('clientId');
 
-    const handleSaveShift = async (newData) => {
+    const handleSaveShift = async (payload) => {
+        console.log("1. Button Clicked");
+        console.log("2. Current editingShift object:", editingShift);
+
         try {
-            await createShift(newData);
+            if (editingShift) {
+                // If editingShift.shiftId is undefined, this line might be the issue
+                const idToUpdate = editingShift.shiftId || editingShift.id;
+
+                console.log("3. Attempting API call to ID:", idToUpdate);
+
+                if (!idToUpdate) {
+                    throw new Error("Could not find an ID for the shift you are trying to edit.");
+                }
+
+                await updateShift(idToUpdate, payload);
+                console.log("4. API Call Success");
+            } else {
+                await createShift(payload);
+            }
             setIsModalOpen(false);
-            refreshData(); // This calls loadData() in App.jsx to refresh the list!
+            setEditingShift(null);
+            refreshData();
         } catch (err) {
-            alert("Error creating shift");
+            console.error("CATCH BLOCK TRIGGERED:", err);
+            alert("Error saving shift: " + err.message);
         }
     };
 
@@ -32,6 +51,11 @@ export default function ShiftsPage({ shifts, clients, services, refreshData }) {
                 alert("Error deleting shift");
             }
         }
+    };
+
+    const handleOpenEdit = (shift) => {
+        setEditingShift(shift);
+        setIsModalOpen(true);
     };
 
     const displayedShifts = (shifts || []).filter(s => {
@@ -75,15 +99,23 @@ export default function ShiftsPage({ shifts, clients, services, refreshData }) {
                     />
                 </div>
 
-                <ShiftTable shifts={displayedShifts} onDelete={handleDeleteShift} />
+                <ShiftTable
+                    shifts={displayedShifts}
+                    onDelete={handleDeleteShift}
+                    onEdit={handleOpenEdit}
+                />
 
                 {/* Modal for adding shifts */}
                 <CreateShiftModal
                     isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setEditingShift(null);
+                    }}
                     clients={clients}
                     services={services}
                     onSave={handleSaveShift}
+                    initialData={editingShift}
                 />
             </div>
         </div>

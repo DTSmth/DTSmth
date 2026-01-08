@@ -1,7 +1,7 @@
 // src/components/ShiftTable.jsx
 import { createShift, deleteShift } from '../api/shiftApi'; // Added deleteShift here
 
-export default function ShiftTable({ shifts, onDelete }) {
+export default function ShiftTable({ shifts, onDelete, onEdit }) {
     return (
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <table className="w-full border-collapse text-left text-sm text-gray-500">
@@ -72,6 +72,12 @@ export default function ShiftTable({ shifts, onDelete }) {
                             {/* Actions Column */}
                             <td className="px-6 py-4 text-right text-sm">
                                 <div className="flex justify-end gap-3">
+                                    <button
+                                        onClick={() => onEdit(s)}
+                                        className="text-indigo-600 hover:text-indigo-900 mr-4 font-medium"
+                                    >
+                                        Edit
+                                    </button>
                                     <button
                                         onClick={() => onDelete(s.shiftId)}
                                         className="text-red-600 hover:text-red-900 font-medium transition-colors"

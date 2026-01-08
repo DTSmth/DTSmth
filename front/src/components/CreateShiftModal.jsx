@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function CreateShiftModal({ isOpen, onClose, clients = [], services = [], onSave }) {
+export default function CreateShiftModal({ isOpen, onClose, clients = [], services = [], onSave, initialData }) {
     const [formData, setFormData] = useState({
         clientId: '',
         serviceId: '', // This must match the 'value' in your select options
         totalHours: '',
         zipcode: ''
     });
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                clientId: initialData.client?.clientId || '',
+                serviceId: initialData.service?.serviceId || initialData.service?.servicesId || '',
+                totalHours: initialData.totalHours || '',
+                zipcode: initialData.zipcode || ''
+            });
+        } else {
+            setFormData({ clientId: '', serviceId: '', totalHours: '', zipcode: '' });
+        }
+    }, [initialData, isOpen]);
 
     if (!isOpen) return null;
 
@@ -33,7 +46,9 @@ export default function CreateShiftModal({ isOpen, onClose, clients = [], servic
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
             <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">Post New Shift</h2>
+                <h2 className="text-xl font-bold">
+                    {initialData ? 'Edit Shift' : 'Post New Shift'}
+                </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Client Selection */}
@@ -86,6 +101,7 @@ export default function CreateShiftModal({ isOpen, onClose, clients = [], servic
                             <input
                                 type="number"
                                 required
+                                max={"24"}
                                 className="w-full rounded-lg border border-gray-300 p-2.5"
                                 value={formData.totalHours}
                                 onChange={e => setFormData({...formData, totalHours: e.target.value})}
@@ -96,6 +112,7 @@ export default function CreateShiftModal({ isOpen, onClose, clients = [], servic
                             <input
                                 type="text"
                                 required
+                                max={"99999"}
                                 className="w-full rounded-lg border border-gray-300 p-2.5"
                                 value={formData.zipcode}
                                 onChange={e => setFormData({...formData, zipcode: e.target.value})}
