@@ -1,6 +1,3 @@
-// src/components/ShiftTable.jsx
-import { createShift, deleteShift } from '../api/shiftApi'; // Added deleteShift here
-
 export default function ShiftTable({ shifts, onDelete, onEdit }) {
     return (
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">

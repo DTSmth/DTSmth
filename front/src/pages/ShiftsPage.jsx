@@ -18,7 +18,6 @@ export default function ShiftsPage({ shifts, clients, services, refreshData }) {
 
         try {
             if (editingShift) {
-                // If editingShift.shiftId is undefined, this line might be the issue
                 const idToUpdate = editingShift.shiftId || editingShift.id;
 
                 console.log("3. Attempting API call to ID:", idToUpdate);

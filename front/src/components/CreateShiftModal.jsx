@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 export default function CreateShiftModal({ isOpen, onClose, clients = [], services = [], onSave, initialData }) {
     const [formData, setFormData] = useState({
         clientId: '',
-        serviceId: '', // This must match the 'value' in your select options
+        serviceId: '',
         totalHours: '',
         zipcode: ''
     });
@@ -26,13 +26,12 @@ export default function CreateShiftModal({ isOpen, onClose, clients = [], servic
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Construct the payload to match your Spring Boot Models exactly
         const payload = {
             client: {
                 clientId: parseInt(formData.clientId, 10)
             },
             service: {
-                servicesId: parseInt(formData.serviceId, 10) // Must be a valid number
+                servicesId: parseInt(formData.serviceId, 10)
             },
             totalHours: parseInt(formData.totalHours, 10),
             zipcode: formData.zipcode,
@@ -77,13 +76,12 @@ export default function CreateShiftModal({ isOpen, onClose, clients = [], servic
                             className="w-full rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-indigo-500"
                             value={formData.serviceId}
                             onChange={e => {
-                                console.log("Selected Value:", e.target.value); // Add this log!
+                                console.log("Selected Value:", e.target.value);
                                 setFormData({...formData, serviceId: e.target.value});
                             }}
                         >
                             <option value="">-- Select Service --</option>
                             {services.map(s => {
-                                // Check if s.servicesId exists, otherwise try s.serviceId
                                 const actualId = s.servicesId || s.serviceId || s.id;
                                 return (
                                     <option key={actualId} value={actualId}>

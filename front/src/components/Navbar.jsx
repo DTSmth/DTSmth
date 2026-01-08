@@ -11,7 +11,6 @@ export default function Navbar() {
         navigate('/login');
     };
 
-    // Helper to check if a link is active
     const isActive = (path) => location.pathname === path;
 
     const navLinks = [

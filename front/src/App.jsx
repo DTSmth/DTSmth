@@ -39,7 +39,7 @@ function AppContent() {
                 .then(([clientRes, shiftRes, serviceRes]) => {
                     setClients(clientRes.data || []);
                     setShifts(shiftRes.data || []);
-                    setServices(serviceRes.data || []); // Now serviceRes exists!
+                    setServices(serviceRes.data || []);
                 })
                 .catch(err => console.error("Error loading app data", err));
         }
