@@ -35,11 +35,11 @@ public class Services {
         this.serviceName = serviceName;
     }
 
-    public int getServiceId() {
+    public int getServicesId() {
         return servicesId;
     }
 
-    public void setServiceId(int serviceId) {
+    public void setServicesId(int serviceId) {
         this.servicesId = serviceId;
     }
 

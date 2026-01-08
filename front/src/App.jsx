@@ -1,3 +1,4 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import LoginPage from './pages/LoginPage';
@@ -7,9 +8,13 @@ import ReportsPage from "./pages/ReportsPage.jsx";
 import ProtectedRoute from './auth/ProtectedRoute';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import Navbar from './components/Navbar';
+
+// API imports
 import { getAllClients } from './api/clientApi';
 import { getAllShifts } from './api/shiftApi';
+import { getAllServices } from './api/serviceApi';
 
+// 1. Define Layout First
 function AppLayout() {
     return (
         <div className="min-h-screen bg-gray-50">
@@ -21,21 +26,27 @@ function AppLayout() {
     );
 }
 
+// 2. Define Content Logic
 function AppContent() {
     const [clients, setClients] = useState([]);
     const [shifts, setShifts] = useState([]);
-    const { token } = useAuth(); // We only fetch if we have a token
+    const [services, setServices] = useState([]);
+    const { token } = useAuth();
 
-    useEffect(() => {
+    const loadData = () => {
         if (token) {
-            // Fetch both at the same time
-            Promise.all([getAllClients(), getAllShifts()])
-                .then(([clientRes, shiftRes]) => {
-                    setClients(clientRes.data);
-                    setShifts(shiftRes.data);
+            Promise.all([getAllClients(), getAllShifts(), getAllServices()])
+                .then(([clientRes, shiftRes, serviceRes]) => {
+                    setClients(clientRes.data || []);
+                    setShifts(shiftRes.data || []);
+                    setServices(serviceRes.data || []); // Now serviceRes exists!
                 })
                 .catch(err => console.error("Error loading app data", err));
         }
+    };
+
+    useEffect(() => {
+        loadData();
     }, [token]);
 
     return (
@@ -44,9 +55,15 @@ function AppContent() {
             <Route path="/login" element={<LoginPage />} />
 
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-                {/* Now we pass the data as props to the pages */}
                 <Route path="/clients" element={<ClientsPage clients={clients} />} />
-                <Route path="/shifts" element={<ShiftsPage shifts={shifts} />} />
+                <Route path="/shifts" element={
+                    <ShiftsPage
+                        shifts={shifts}
+                        clients={clients}
+                        services={services}
+                        refreshData={loadData}
+                    />
+                } />
                 <Route path="/reports" element={<ReportsPage clients={clients} shifts={shifts} />} />
             </Route>
 
@@ -55,7 +72,8 @@ function AppContent() {
     );
 }
 
-export default function App() {
+// 3. Define Main Entry Point
+function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
@@ -64,3 +82,5 @@ export default function App() {
         </AuthProvider>
     );
 }
+
+export default App;

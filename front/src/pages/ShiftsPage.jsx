@@ -1,36 +1,44 @@
 // src/pages/ShiftsPage.jsx
-import { useEffect, useState } from 'react';
+import { useState } from 'react'; // Removed useEffect
 import { useSearchParams } from 'react-router-dom';
-import { getAllShifts } from '../api/shiftApi';
+import { createShift, deleteShift } from '../api/shiftApi';
 import ShiftTable from '../components/ShiftTable';
+import CreateShiftModal from '../components/CreateShiftModal'; // Make sure this file exists!
 
-export default function ShiftsPage() {
-    const [shifts, setShifts] = useState([]);
+export default function ShiftsPage({ shifts, clients, services, refreshData }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const clientIdFilter = searchParams.get('clientId');
 
+    const handleSaveShift = async (newData) => {
+        try {
+            await createShift(newData);
+            setIsModalOpen(false);
+            refreshData(); // This calls loadData() in App.jsx to refresh the list!
+        } catch (err) {
+            alert("Error creating shift");
+        }
+    };
 
-    useEffect(() => {
-        getAllShifts()
-            .then(res => {
-                setShifts(res.data);
-                setLoading(false);
-            })
-            .catch(err => {
+    const handleDeleteShift = async (id) => {
+        if (window.confirm("Are you sure you want to delete this shift?")) {
+            try {
+                await deleteShift(id);
+                refreshData(); // Re-fetches the list from App.jsx
+            } catch (err) {
                 console.error(err);
-                setLoading(false);
-            });
-    }, []);
+                alert("Error deleting shift");
+            }
+        }
+    };
 
-    const displayedShifts = shifts.filter(s => {
-        // 1. Filter by Client ID (from URL)
+    const displayedShifts = (shifts || []).filter(s => {
         const matchesClient = clientIdFilter ? s.client?.clientId === parseInt(clientIdFilter) : true;
-
-        // 2. Filter by Search Term (Zip or Service)
         const matchesSearch =
-            s.zipcode.includes(searchTerm) ||
-            s.service?.serviceName.toLowerCase().includes(searchTerm.toLowerCase());
+            (s.zipcode || "").includes(searchTerm) ||
+            (s.service?.serviceName || "").toLowerCase().includes(searchTerm.toLowerCase());
 
         return matchesClient && matchesSearch;
     });
@@ -38,47 +46,45 @@ export default function ShiftsPage() {
     return (
         <div className="py-8 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                {/* Top Row */}
                 <div className="flex items-center justify-between mb-6">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                            {clientIdFilter ? 'Client Schedule' : 'Shift Board'}
-                        </h1>
-                    </div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                        {clientIdFilter ? 'Client Schedule' : 'Shift Board'}
+                    </h1>
                     <div className="flex gap-3">
                         {clientIdFilter && (
-                            <button
-                                onClick={() => setSearchParams({})}
-                                className="inline-flex items-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-all"
-                            >
+                            <button onClick={() => setSearchParams({})} className="...">
                                 Clear Client Filter
                             </button>
                         )}
-                        <button className="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-all">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-all"
+                        >
                             Post New Shift
                         </button>
                     </div>
                 </div>
 
-                {/* Search Toolbar */}
                 <div className="mb-6">
-                    <div className="relative max-w-md w-full">
-                        <input
-                            type="text"
-                            className="block w-full rounded-lg border-0 py-2 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
-                            placeholder="Search Zipcode or Service..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                    {clientIdFilter && (
-                        <p className="mt-2 text-xs text-indigo-600 font-medium italic">
-                            * Filtering by specific client
-                        </p>
-                    )}
+                    <input
+                        type="text"
+                        className="block w-full rounded-lg border-gray-300 py-2 px-4 shadow-sm focus:ring-2 focus:ring-indigo-600 sm:text-sm border"
+                        placeholder="Search Zipcode or Service..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
 
-                <ShiftTable shifts={displayedShifts} />
+                <ShiftTable shifts={displayedShifts} onDelete={handleDeleteShift} />
+
+                {/* Modal for adding shifts */}
+                <CreateShiftModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    clients={clients}
+                    services={services}
+                    onSave={handleSaveShift}
+                />
             </div>
         </div>
     );
