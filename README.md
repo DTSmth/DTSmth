@@ -4,7 +4,7 @@ Im a fullstack software engineer by day. Student of blockchain development by ni
 ### 🚀 Full-Stack Developer & Blockchain Enthusiast
 I am a passionate software engineer specializing in building robust backends with **Java & Spring Boot** and decentralized applications using **Rust & Anchor**. I thrive on designing scalable database architectures and creating seamless user experiences with modern frontend frameworks.
 
-- 🔭 I’m currently working on A fullstack application to match open clients/shirt with candidates. check it out in my care-connect repo
+- 🔭 I’m currently working on A fullstack application to match open clients/shirt with candidates. Check it out in my care-connect repo
 - 🌱 I’m currently learning **Advanced Blockchain Architecture**
 - 💬 Ask me about **Java, Spring Boot, or Solana Development**
 - 📫 How to reach me: https://www.linkedin.com/in/davidtsmithdev/
