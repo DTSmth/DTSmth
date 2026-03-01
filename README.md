@@ -2,7 +2,7 @@
 Im a fullstack software engineer by day. Student of blockchain development by night. 
 
 ### 🚀 Full-Stack Developer & Blockchain Enthusiast
-I am a passionate software engineer specializing in building robust backends with **Java & Spring Boot** and decentralized applications using **Rust & Anchor**. I thrive on designing scalable database architectures and creating seamless user experiences with modern frontend frameworks.
+I am a passionate software engineer specializing in building robust backends with **Java & Spring Boot** and decentralized applications using **Rust, Anchor, & Substrate**. I thrive on designing scalable database architectures and creating seamless, interoperable experiences across the **Solana** and **Polkadot** ecosystems.
 
 - 🔭 I’m currently working on A fullstack application to match open clients/shirt with candidates. Check it out [here](https://frontend-244230612831.us-east1.run.app/)
 - 🌱 I’m currently learning **Advanced Blockchain Architecture**
