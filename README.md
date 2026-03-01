@@ -24,6 +24,8 @@ I am a passionate software engineer specializing in building robust backends wit
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 ### ⛓️ Blockchain Development
+![Polkadot](https://img.shields.io/badge/Polkadot-%23E6007A.svg?style=for-the-badge&logo=polkadot&logoColor=white)
+![Substrate](https://img.shields.io/badge/Substrate-%23282828.svg?style=for-the-badge&logo=substrate&logoColor=white)
 ![Solana](https://img.shields.io/badge/Solana-%23000.svg?style=for-the-badge&logo=solana&logoColor=9945FF)
 ![Anchor](https://img.shields.io/badge/Anchor-black?style=for-the-badge&logo=anchor&logoColor=white)
 ![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
